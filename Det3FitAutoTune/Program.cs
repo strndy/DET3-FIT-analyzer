@@ -10,30 +10,44 @@ namespace Det3FitAutoTune
 {
     class Program
     {
+        public const int samplesPerSec = 30;
+        public const int lineLength = 40;
+
         static void Main(string[] args)
         {
             var logReader = new LogReader();
-            //var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016131_1613_short.dlg");
-            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016131_1555.dlg");
+            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_201627_1039_straight_start.dlg");
 
-            var count = 0;
-            for (int i = 16; i < logBytes.Length; i++)
+            var startBytes = logBytes.Take(12).ToArray();
+            Console.WriteLine(BitConverter.ToString(startBytes));
+
+            var timeInSeconds = 10;
+            var howManyBytes = (samplesPerSec * lineLength * timeInSeconds);
+
+            var shortened = logBytes.Skip(12).Take(howManyBytes).ToArray();
+
+
+            var total = (shortened.Length)/40;
+            Console.WriteLine("total lines {0}", total);
+
+            for (int i = 0; i < shortened.Length; i += lineLength)
             {
+                var newArray = shortened.Skip(i).Take(40).ToArray();
                 
-                Console.Write(Encoding.ASCII.GetChars(logBytes, i, 1));
-                count++;
-                if (count%40 == 0)
-                {
-                    Console.WriteLine();
-                }
+                string hex = BitConverter.ToString(newArray);
+
+                Console.WriteLine(hex);
+
+                Console.WriteLine(Encoding.ASCII.GetChars(shortened, i, lineLength));
             }
-            var len = logBytes.Length;
-            //var log = logReader.GetLogLine(logBytes);
-            var resized = logBytes;
-            Array.Resize(ref resized, 40*100 + 12);
-            File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016131_1555_mine.dlg", resized);
 
+            var result = startBytes.Concat(shortened).ToArray();
+            File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_mine.dlg", result);
+        }
 
+        private static byte[] ChangeValue(byte[] data)
+        {
+            throw new Exception();
         }
     }
 }
