@@ -47,19 +47,26 @@ namespace Det3FitAutoTune.Test2
             var testSet = new Dictionary<int, byte>()
             {
                 {0, 20},
+                {20, 45},
                 {25, 50},
                 {49, 80},
                 {66, 100},
                 {91, 130},
                 {99, 149},
+                {100, 150},
  
             };
 
             var tps = new Tps();
             foreach(var item in testSet)
             {
-                tps.Value = 
-                Assert.AreEqual(11, Math.Round(map.Value));
+                var expValue = item.Key;
+                var expBytes = item.Value;
+
+                tps.Value = expValue;
+
+                Assert.IsTrue((expBytes - tps.Bytes) < 3);
+                Assert.IsTrue((expValue - tps.Value) < 3);
             }
 
         }

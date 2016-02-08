@@ -8,10 +8,15 @@ namespace Det3FitAutoTune.Model.Value
 {
     public abstract class AbstractField
     {
-        public double Ratio
+        public const float Offset = (MaxVal * MinByte - MinVal * MaxByte) / (MaxVal - MinVal);
+
+        public const float Ratio = (MaxByte - Offset) / MaxVal;
+
+        public float Ratio
         {
             get { return ushort.MaxValue / (MaxValue + Offset); }
         }
+
         public abstract double MaxValue 
         {
             get;

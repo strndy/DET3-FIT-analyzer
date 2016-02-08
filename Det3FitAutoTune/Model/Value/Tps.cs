@@ -8,12 +8,17 @@ namespace Det3FitAutoTune.Model.Value
 {
     public class Tps : IField
     {
-        public const int Min = 20;
-        public const int Max = 150;
+        public const byte MinByte = 20;
+        public const byte MaxByte = 150;
 
-        public const float Ratio = byte.MaxValue / (Max - Min);
+        public const float MinVal = 0;
+        public const float MaxVal = 100;
 
-        private byte _value;
+        public const float Offset = (MaxVal * MinByte - MinVal * MaxByte) / (MaxVal - MinVal);
+
+        public const float Ratio = (MaxByte - Offset) / MaxVal;
+
+        protected byte _bytes;
 
         public int Position
         {
@@ -24,11 +29,11 @@ namespace Det3FitAutoTune.Model.Value
         {
             get
             {
-                return (_value / Ratio - Min);
+                return (_bytes - Offset) / (Ratio);
             }
             set
             {
-                _value = (byte)Math.Round((value + Min) * Ratio);
+                _bytes = checked((byte) Math.Round(value * Ratio + Offset));
             }
         }
 
@@ -36,11 +41,11 @@ namespace Det3FitAutoTune.Model.Value
         {
             get
             {
-                return _value;
+                return _bytes;
             }
             set
             {
-                _value = value;
+                _bytes = value;
             }
         }
 

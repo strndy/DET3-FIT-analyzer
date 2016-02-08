@@ -40,7 +40,7 @@ namespace Det3FitAutoTune
 
             for (int line = 0; line < howManyLines; line += 1)
             {
-                tps.Bytes = 150;
+                tps.Bytes = 45;
                 firstLine[0] = tps.Bytes;
                 if (line % 15 == 0) 
                 {
