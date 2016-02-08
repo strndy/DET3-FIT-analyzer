@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Value\AbstractField.cs" />
+    <Compile Include="Model\Value\IField.cs" />
+    <Compile Include="Model\Value\Map.cs" />
+    <Compile Include="Model\Value\Tps.cs" />
     <Compile Include="Service\LogReader.cs" />
     <Compile Include="Model\LogLine.cs" />
     <Compile Include="Program.cs" />

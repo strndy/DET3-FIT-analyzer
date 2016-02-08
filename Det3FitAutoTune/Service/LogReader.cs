@@ -8,9 +8,6 @@ namespace Det3FitAutoTune.Service
         {
             var line = new LogLine();
 
-            
-            
-
             return line;
         }
     }

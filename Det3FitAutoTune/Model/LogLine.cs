@@ -8,5 +8,7 @@ namespace Det3FitAutoTune.Model
 {
     public class LogLine
     {
+
+
     }
 }
