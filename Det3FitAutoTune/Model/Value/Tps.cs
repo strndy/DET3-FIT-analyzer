@@ -1,52 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Det3FitAutoTune.Model.Value
 {
-    public class Tps : IField
+    public class Tps : AbstractField
     {
-        public const byte MinByte = 20;
-        public const byte MaxByte = 150;
+        protected override byte MinByte
+        {
+            get { return 20; }
+        }
 
-        public const float MinVal = 0;
-        public const float MaxVal = 100;
+        protected override byte MaxByte
+        {
+            get { return 150; }
+        }
 
-        public const float Offset = (MaxVal * MinByte - MinVal * MaxByte) / (MaxVal - MinVal);
-
-        public const float Ratio = (MaxByte - Offset) / MaxVal;
-
-        protected byte _bytes;
-
-        public int Position
+        protected override float MinVal
         {
             get { return 0; }
         }
 
-        public float Value
+        protected override float MaxVal
         {
-            get
-            {
-                return (_bytes - Offset) / (Ratio);
-            }
-            set
-            {
-                _bytes = checked((byte) Math.Round(value * Ratio + Offset));
-            }
+            get { return 100; }
         }
 
-        public byte Bytes
+        public override int Position
         {
-            get
-            {
-                return _bytes;
-            }
-            set
-            {
-                _bytes = value;
-            }
+            get { return 0; }
         }
 
         public void BytesFromLine(byte[] bytes)

@@ -1,25 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Det3FitAutoTune.Model.Value
+﻿namespace Det3FitAutoTune.Model.Value
 {
     public class Map : AbstractField
     {
-        public override double MaxValue
+        protected override byte MaxByte
         {
-            get { return 253; }
+            get { return 250; }
         }
-        public override double Offset
+
+        protected override float MaxVal
         {
-            get { return 6; }
+            get { return 238; }
+        }
+
+        protected override byte MinByte
+        {
+            get { return 10; }
+        }
+
+        protected override float MinVal
+        {
+            get { return 4; }
         }
 
         public override int Position
         {
-            get { return 0; }
+            get { return 1; }
         }
 
         /// <summary>

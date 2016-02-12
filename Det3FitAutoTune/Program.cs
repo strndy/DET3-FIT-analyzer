@@ -20,7 +20,6 @@ namespace Det3FitAutoTune
             var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016131_1555.dlg");
 
             var startBytes = logBytes.Take(12).ToArray();
-            //Console.WriteLine(BitConverter.ToString(startBytes));
 
             var timeInSeconds = 10;
             var howManyLines = (samplesPerSec * timeInSeconds);
@@ -35,20 +34,16 @@ namespace Det3FitAutoTune
 
             var result = startBytes;
 
-            var tps = new Tps();
-            tps.Value = 0;
+            var tps = new Tps {Value = 0};
+
+            var map = new Map() {Value = 200};
 
             for (int line = 0; line < howManyLines; line += 1)
             {
                 tps.Bytes = 45;
-                firstLine[0] = tps.Bytes;
-                if (line % 15 == 0) 
-                {
-                    if (tps.Value < 100) 
-                    { 
-                        
-                    }
-                }
+                firstLine[tps.Position] = tps.Bytes;
+                firstLine[map.Position] = map.Bytes;
+                firstLine[map.Position] = map.Bytes;
 
                 result = result.Concat(firstLine).ToArray();
             }

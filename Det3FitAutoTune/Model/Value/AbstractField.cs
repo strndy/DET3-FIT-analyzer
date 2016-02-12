@@ -1,29 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Det3FitAutoTune.Model.Value
 {
-    public abstract class AbstractField
+    public abstract class AbstractField : IField
     {
-        public const float Offset = (MaxVal * MinByte - MinVal * MaxByte) / (MaxVal - MinVal);
+        private static float? _ratio;
+        private static float? _offset;
 
-        public const float Ratio = (MaxByte - Offset) / MaxVal;
+        protected abstract byte MaxByte { get; }
+        protected abstract byte MinByte { get; }
+        protected abstract float MaxVal { get; }
+        protected abstract float MinVal { get; }
 
-        public float Ratio
+        protected byte _bytes;
+
+        protected float Ratio
         {
-            get { return ushort.MaxValue / (MaxValue + Offset); }
+            get 
+            { 
+                if(_ratio == null)
+                {
+                    _ratio = (MaxByte - Offset) / MaxVal;
+                }
+                return (float)_ratio;
+            }
         }
 
-        public abstract double MaxValue 
+        protected float Offset
         {
-            get;
-        }
-        public abstract double Offset
-        {
-            get;
+            get 
+            { 
+                if(_offset == null)
+                {
+                    _offset = (MaxVal * MinByte - MinVal * MaxByte) / (MaxVal - MinVal);
+                }
+                return (float)_offset;
+            }
         }
 
         public abstract int Position
@@ -31,35 +43,33 @@ namespace Det3FitAutoTune.Model.Value
             get;
         }
 
-        protected byte _value;
-
-        public int Short
+        public float Value
         {
-            get { return _value; }
+            get
+            {
+                return (_bytes - Offset) / (Ratio);
+            }
+            set
+            {
+                _bytes = checked((byte)Math.Round(value * Ratio + Offset));
+            }
         }
 
-        public float Value 
-        { 
-            get 
-            { 
-                return (float) (_value / Ratio + Offset);
-            } 
-            set 
-            { 
-                _value = (byte)Math.Round((value - Offset) * Ratio);
-            } 
+        public byte Bytes
+        {
+            get
+            {
+                return _bytes;
+            }
+            set
+            {
+                _bytes = value;
+            }
         }
 
-        public byte Bytes 
-        { 
-            get 
-            {
-                return _value;// BitConverter.GetBytes(_value);
-            } 
-            set 
-            {
-                _value = value;
-            } 
+        public void BytesFromLine(byte[] bytes)
+        {
+            throw new NotImplementedException();
         }
     }
 }
