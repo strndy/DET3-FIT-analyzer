@@ -2,27 +2,27 @@
 {
     public class Map : AbstractField
     {
-        protected override byte MaxByte
+        protected override byte Bytes1
         {
-            get { return 250; }
+            get { return 50; }
         }
 
-        protected override float MaxVal
+        protected override float Val1
         {
-            get { return 238; }
+            get { return 43; }
         }
 
-        protected override byte MinByte
+        protected override byte Bytes2
         {
-            get { return 10; }
+            get { return 200; }
         }
 
-        protected override float MinVal
+        protected override float Val2
         {
-            get { return 4; }
+            get { return 190; }
         }
 
-        public override int Position
+        public override int Index
         {
             get { return 1; }
         }

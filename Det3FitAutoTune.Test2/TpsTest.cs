@@ -46,11 +46,10 @@ namespace Det3FitAutoTune.Test2
                 {0, 20},
                 {20, 45},
                 {25, 50},
-                {49, 80},
+                {51, 82},
                 {66, 100},
                 {91, 130},
-                {99, 149},
-                {100, 150},
+                {99, 140},
  
             };
 
@@ -61,9 +60,9 @@ namespace Det3FitAutoTune.Test2
                 var expBytes = item.Value;
 
                 tps.Value = expValue;
-
-                Assert.IsTrue((expBytes - tps.Bytes) < 3);
-                Assert.IsTrue((expValue - tps.Value) < 3);
+                int diff = Math.Abs(expBytes - tps.Bytes);
+                Assert.IsTrue(diff < 3);
+                Assert.IsTrue(Math.Abs(expValue - tps.Value) < 3);
             }
 
         }

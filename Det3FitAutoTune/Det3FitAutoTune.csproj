@@ -101,7 +101,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Value\AbstractField.cs" />
+    <Compile Include="Model\Value\AccEnr.cs" />
+    <Compile Include="Model\Value\Coolant.cs" />
+    <Compile Include="Model\Value\Iat.cs" />
     <Compile Include="Model\Value\IField.cs" />
+    <Compile Include="Model\Value\AfrWideband.cs" />
+    <Compile Include="Model\Value\LambdaCorrection.cs" />
     <Compile Include="Model\Value\Map.cs" />
     <Compile Include="Model\Value\Tps.cs" />
     <Compile Include="Service\LogReader.cs" />

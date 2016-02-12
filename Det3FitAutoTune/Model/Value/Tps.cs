@@ -4,27 +4,27 @@ namespace Det3FitAutoTune.Model.Value
 {
     public class Tps : AbstractField
     {
-        protected override byte MinByte
+        protected override byte Bytes2
         {
             get { return 20; }
         }
 
-        protected override byte MaxByte
+        protected override byte Bytes1
         {
-            get { return 150; }
+            get { return 140; }
         }
 
-        protected override float MinVal
+        protected override float Val2
         {
             get { return 0; }
         }
 
-        protected override float MaxVal
+        protected override float Val1
         {
-            get { return 100; }
+            get { return 99; }
         }
 
-        public override int Position
+        public override int Index
         {
             get { return 0; }
         }

@@ -14,7 +14,7 @@ namespace Det3FitAutoTune.Model.Value
             set;
         }
 
-        int Position
+        int Index
         {
             get;
         }

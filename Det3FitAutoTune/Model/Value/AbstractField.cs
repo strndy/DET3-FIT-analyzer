@@ -1,44 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Det3FitAutoTune.Model.Value
 {
     public abstract class AbstractField : IField
     {
-        private static float? _ratio;
-        private static float? _offset;
+        private static readonly IDictionary<Type, float?> _ratio = new Dictionary<Type, float?>();
+        private static readonly IDictionary<Type, float?> _offset = new Dictionary<Type, float?>();
 
-        protected abstract byte MaxByte { get; }
-        protected abstract byte MinByte { get; }
-        protected abstract float MaxVal { get; }
-        protected abstract float MinVal { get; }
+        protected abstract byte Bytes1 { get; }
+        protected abstract float Val1 { get; }
+
+        protected abstract byte Bytes2 { get; }
+        protected abstract float Val2 { get; }
 
         protected byte _bytes;
 
         protected float Ratio
         {
             get 
-            { 
-                if(_ratio == null)
+            {
+                if (!_ratio.ContainsKey(this.GetType()))
                 {
-                    _ratio = (MaxByte - Offset) / MaxVal;
+                    _ratio[this.GetType()] = (Bytes1 - Offset) / Val1;
                 }
-                return (float)_ratio;
+                return (float)_ratio[this.GetType()];
             }
         }
 
         protected float Offset
         {
             get 
-            { 
-                if(_offset == null)
+            {
+                if (!_offset.ContainsKey(this.GetType()))
                 {
-                    _offset = (MaxVal * MinByte - MinVal * MaxByte) / (MaxVal - MinVal);
+                    _offset[this.GetType()] = (Val1 * Bytes2 - Val2 * Bytes1) / (Val1 - Val2);
                 }
-                return (float)_offset;
+                return (float)_offset[this.GetType()];
             }
         }
 
-        public abstract int Position
+        public abstract int Index
         {
             get;
         }
