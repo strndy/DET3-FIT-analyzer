@@ -100,14 +100,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Value\AbstractField.cs" />
+    <Compile Include="Extension\CollectionExtension.cs" />
+    <Compile Include="Service\MapCoordinates.cs" />
+    <Compile Include="Model\Value\AbstractByteField.cs" />
     <Compile Include="Model\Value\AccEnr.cs" />
+    <Compile Include="Service\ValueMapBuilder.cs" />
     <Compile Include="Model\Value\Coolant.cs" />
     <Compile Include="Model\Value\Iat.cs" />
     <Compile Include="Model\Value\IField.cs" />
     <Compile Include="Model\Value\AfrWideband.cs" />
-    <Compile Include="Model\Value\LambdaCorrection.cs" />
+    <Compile Include="Model\Value\AfrCorrection.cs" />
     <Compile Include="Model\Value\Map.cs" />
+    <Compile Include="Model\Value\Rpm.cs" />
     <Compile Include="Model\Value\Tps.cs" />
     <Compile Include="Service\LogReader.cs" />
     <Compile Include="Model\LogLine.cs" />

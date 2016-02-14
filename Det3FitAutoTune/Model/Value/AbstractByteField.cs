@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Det3FitAutoTune.Model.Value
 {
-    public abstract class AbstractField : IField
+    public abstract class AbstractByteField : IField<byte>
     {
         private static readonly IDictionary<Type, float?> _ratio = new Dictionary<Type, float?>();
         private static readonly IDictionary<Type, float?> _offset = new Dictionary<Type, float?>();
@@ -40,11 +40,6 @@ namespace Det3FitAutoTune.Model.Value
             }
         }
 
-        public abstract int Index
-        {
-            get;
-        }
-
         public float Value
         {
             get
@@ -67,11 +62,6 @@ namespace Det3FitAutoTune.Model.Value
             {
                 _bytes = value;
             }
-        }
-
-        public void BytesFromLine(byte[] bytes)
-        {
-            throw new NotImplementedException();
         }
     }
 }

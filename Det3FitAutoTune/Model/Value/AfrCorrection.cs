@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Det3FitAutoTune.Model.Value
+﻿namespace Det3FitAutoTune.Model.Value
 {
-    public class LambdaCorrection : AbstractField
+    public class AfrCorrection : AbstractByteField
     {
         protected override byte Bytes1
         {
@@ -26,11 +20,6 @@ namespace Det3FitAutoTune.Model.Value
         protected override float Val2
         {
             get { return 10; }
-        }
-
-        public override int Index
-        {
-            get { return 8; }
         }
     }
 }

@@ -1,30 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Det3FitAutoTune.Model.Value
 {
+    public interface IField<T> : IField
+    {
+        T Bytes { get; set; }
+    }
+
     public interface IField
     {
-        float Value
-        {
-            get;
-            set;
-        }
-
-        int Index
-        {
-            get;
-        }
-
-        byte Bytes
-        {
-            get;
-            set;
-        }
-
-        void BytesFromLine(byte[] bytes);
+        float Value { get; set; }
     }
 }

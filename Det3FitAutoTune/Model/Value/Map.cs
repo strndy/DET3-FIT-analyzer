@@ -1,6 +1,6 @@
 ﻿namespace Det3FitAutoTune.Model.Value
 {
-    public class Map : AbstractField
+    public class Map : AbstractByteField
     {
         protected override byte Bytes1
         {
@@ -20,11 +20,6 @@
         protected override float Val2
         {
             get { return 190; }
-        }
-
-        public override int Index
-        {
-            get { return 1; }
         }
 
         /// <summary>

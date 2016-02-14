@@ -1,7 +1,7 @@
 ﻿
 namespace Det3FitAutoTune.Model.Value
 {
-    public class AfrWideband : AbstractField
+    public class AfrWideband : AbstractByteField
     {
         protected override byte Bytes1
         {
@@ -21,11 +21,6 @@ namespace Det3FitAutoTune.Model.Value
         protected override float Val2
         {
             get { return 20; }
-        }
-
-        public override int Index
-        {
-            get { return 9; }
         }
     }
 }

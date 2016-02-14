@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Det3FitAutoTune.Model.Value
+﻿namespace Det3FitAutoTune.Model.Value
 {
-    public class Iat : AbstractField
+    public class Iat : AbstractByteField
     {
         protected override byte Bytes1
         {
@@ -27,12 +21,5 @@ namespace Det3FitAutoTune.Model.Value
         {
             get { return 92; }
         }
-
-        public override int Index
-        {
-            get { return 3; }
-        }
-
-
     }
 }

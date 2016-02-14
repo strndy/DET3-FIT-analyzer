@@ -2,7 +2,7 @@
 
 namespace Det3FitAutoTune.Model.Value
 {
-    public class Tps : AbstractField
+    public class Tps : AbstractByteField
     {
         protected override byte Bytes2
         {
@@ -22,16 +22,6 @@ namespace Det3FitAutoTune.Model.Value
         protected override float Val1
         {
             get { return 99; }
-        }
-
-        public override int Index
-        {
-            get { return 0; }
-        }
-
-        public void BytesFromLine(byte[] bytes)
-        {
-            throw new NotImplementedException();
         }
     }
 }
