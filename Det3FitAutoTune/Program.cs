@@ -19,9 +19,15 @@ namespace Det3FitAutoTune
 
             var coords = new MapCoordinates();
             var mapBuilder = new ValueMapBuilder(coords);
+            var analyser = new AfrAnalyser();
+            var display = new MapShower(coords);
 
             var log = logReader.ReadLog(logBytes);
             var map = mapBuilder.BuildMap(log);
+
+            var analysed = analyser.GetAverangeAfrCorrection(map);
+
+            display.DisplayMap(analysed);
 
             return;
 

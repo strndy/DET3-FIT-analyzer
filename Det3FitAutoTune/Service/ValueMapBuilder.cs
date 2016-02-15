@@ -15,7 +15,7 @@ namespace Det3FitAutoTune.Service
             _coord = coord;
         }
 
-        public List<LogLine>[,] BuildMap(IEnumerable<LogLine> log)
+        public IEnumerable<LogLine>[,] BuildMap(IEnumerable<LogLine> log)
         {
             var map = new List<LogLine>[16,16];
 
@@ -24,11 +24,11 @@ namespace Det3FitAutoTune.Service
                 //TODO ignore acc enr., warmup, atd
                 var kpaIndex = _coord.KpaIndex(logLine.Map.Value);
                 var rpmIndex = _coord.RpmIndex(logLine.Rpm.Value);
-                if (map[kpaIndex, rpmIndex] == null)
+                if (map[rpmIndex, kpaIndex] == null)
                 {
-                    map[kpaIndex, rpmIndex] = new List<LogLine>();
+                    map[rpmIndex, kpaIndex] = new List<LogLine>();
                 }
-                map[kpaIndex, rpmIndex].Add(logLine);
+                map[rpmIndex, kpaIndex].Add(logLine);
                 
             }
 

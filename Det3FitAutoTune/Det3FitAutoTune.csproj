@@ -101,9 +101,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extension\CollectionExtension.cs" />
+    <Compile Include="Model\ProjectedAfrCorrection.cs" />
+    <Compile Include="Service\AfrAnalyser.cs" />
     <Compile Include="Service\MapCoordinates.cs" />
     <Compile Include="Model\Value\AbstractByteField.cs" />
     <Compile Include="Model\Value\AccEnr.cs" />
+    <Compile Include="Service\MapShower.cs" />
     <Compile Include="Service\ValueMapBuilder.cs" />
     <Compile Include="Model\Value\Coolant.cs" />
     <Compile Include="Model\Value\Iat.cs" />
