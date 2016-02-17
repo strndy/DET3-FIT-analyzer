@@ -13,23 +13,32 @@ namespace Det3FitAutoTune.Service
 
         public readonly byte[] Header = { 106, 100, 97, 103, 2, 0, 0, 0, 145, 9, 0, 0 };
 
-        private readonly IDictionary<string, int> _index = new Dictionary<string, int>()
+        public static readonly IDictionary<string, int> Index = new Dictionary<string, int>()
         {
-            {"AccEnr", 18},
-            {"AfrWideband", 9},
-            {"AfrCorrection", 8},
+            {"Tps", 0},
+            {"Map", 1},
             {"Coolant", 2},
             {"Iat", 3},
-            {"Map", 1},
-            {"Tps", 0},
+
+
+
+            {"AfrCorrection", 8},
+            {"AfrWideband", 9},
             {"Rpm", 10},
+            //Rpm 10-11
+
+            // ignnition error 14
+
+            //Ase 16
+            //Ign 17
+            {"AccEnr", 18},
+            // acc voltage 19
         };
 
-        public IEnumerable<LogLine> ReadLog(byte[] fileContent)
+        public LogLine[] ReadLog(byte[] fileContent)
         {
-            var result = new List<LogLine>();
-
             var howManyLines = (fileContent.Length - Header.Length) / LineLength;
+            var result = new LogLine[howManyLines];
 
             var copyArray = new byte[40];
 
@@ -41,7 +50,7 @@ namespace Det3FitAutoTune.Service
                 Array.Copy(fileContent, skip, copyArray, 0, 40);
                 //var lineBytes = fileContent.Skip(skip).Take(LineLength).ToArray();
                 var line = GetLogLine(copyArray);
-                result.Add(line);
+                result[lineNo] = line;
             }
             return result;
 
@@ -51,15 +60,15 @@ namespace Det3FitAutoTune.Service
         {
             var logLine = new LogLine()
             {
-                Map = new Map() { Bytes = line[_index["Map"]]},
-                AccEnr = new AccEnr() { Bytes = line[_index["AccEnr"]] },
-                AfrCorrection = new AfrCorrection() { Bytes = line[_index["AfrCorrection"]] },
-                AfrWideband = new AfrWideband() { Bytes = line[_index["AfrWideband"]] },
-                Coolant = new Coolant() { Bytes = line[_index["Coolant"]] },
-                Iat = new Iat() { Bytes = line[_index["Iat"]] },
-                Tps = new Tps() { Bytes = line[_index["Tps"]] },
+                Map = new Map() { Bytes = line[Index["Map"]]},
+                AccEnr = new AccEnr() { Bytes = line[Index["AccEnr"]] },
+                AfrCorrection = new AfrCorrection() { Bytes = line[Index["AfrCorrection"]] },
+                AfrWideband = new AfrWideband() { Bytes = line[Index["AfrWideband"]] },
+                Coolant = new Coolant() { Bytes = line[Index["Coolant"]] },
+                Iat = new Iat() { Bytes = line[Index["Iat"]] },
+                Tps = new Tps() { Bytes = line[Index["Tps"]] },
 
-                Rpm = new Rpm() { Bytes = BitConverter.ToUInt16(line, _index["Rpm"]) },
+                Rpm = new Rpm() { Bytes = BitConverter.ToUInt16(line, Index["Rpm"]) },
             };
             return logLine;
         }

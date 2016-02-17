@@ -4,12 +4,12 @@
     {
         protected override byte Bytes1
         {
-            get { return 50; }
+            get { return 30; }
         }
 
         protected override float Val1
         {
-            get { return 43; }
+            get { return 49; }
         }
 
         protected override byte Bytes2
@@ -19,7 +19,7 @@
 
         protected override float Val2
         {
-            get { return 190; }
+            get { return 216; }
         }
 
         /// <summary>

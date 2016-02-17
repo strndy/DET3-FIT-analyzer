@@ -9,6 +9,11 @@ namespace Det3FitAutoTune.Service
     {
         public const float Stoich = 14.7f;
 
+        /// <summary>
+        /// Minimum values to take into account field 30- one second
+        /// </summary>
+        public const int MinValues = 30;
+
         public ProjectedAfrCorrection[,] GetAverangeAfrCorrection(IEnumerable<LogLine>[,] allValues)
         {
             var ANALysed = new ProjectedAfrCorrection[16, 16];
@@ -28,28 +33,30 @@ namespace Det3FitAutoTune.Service
 
         private ProjectedAfrCorrection AverangeCorrection(IEnumerable<LogLine> lines)
         {
+            //TODO target AFR per boost!
             var wideband = new List<float>();
             var correction = new List<float>();
+            var sumarized = new List<float>();
+            var afr = new List<float>();
+
             foreach (var logLine in lines)
             {
                 if (!(Math.Abs(logLine.AfrWideband.Value - Stoich) < 2)) continue;
                 if (logLine.AccEnr.Value > 5) continue;
 
-                wideband.Add(100 - logLine.AfrWideband.Value/Stoich*100);
+                wideband.Add(logLine.AfrWideband.Value/Stoich*100 - 100);
                 correction.Add(logLine.AfrCorrection.Value);
+                sumarized.Add(wideband.Last() + correction.Last());
+                afr.Add(logLine.AfrWideband.Value);
             }
-            return wideband.Count == 0 ? null :  new ProjectedAfrCorrection()
+            return wideband.Count < MinValues ? null :  new ProjectedAfrCorrection()
             {
                 AfrDiff = wideband.Average(),
                 NboCorrection = correction.Average(),
-                Count = wideband.Count
+                SumValue = sumarized.Average(),
+                Count = wideband.Count,
+                AvgAfr = afr.Average()
             };
-        }
-
-        private float CalculateCorrection(float afr, float correction)
-        {
-            var afrDiff = 100 - ((afr/Stoich)*100);
-            return afrDiff + correction;
         }
     }
 }

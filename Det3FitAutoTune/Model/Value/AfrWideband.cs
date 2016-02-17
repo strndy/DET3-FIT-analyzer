@@ -10,7 +10,7 @@ namespace Det3FitAutoTune.Model.Value
 
         protected override float Val1
         {
-            get { return 10; }
+            get { return 7.35f; }
         }
 
         protected override byte Bytes2
@@ -20,7 +20,7 @@ namespace Det3FitAutoTune.Model.Value
 
         protected override float Val2
         {
-            get { return 20; }
+            get { return 22.39f; }
         }
     }
 }
