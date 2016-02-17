@@ -107,6 +107,7 @@
     <Compile Include="Model\Value\AbstractByteField.cs" />
     <Compile Include="Model\Value\AccEnr.cs" />
     <Compile Include="Service\MapShower.cs" />
+    <Compile Include="Service\TargerAfrMap.cs" />
     <Compile Include="Service\ValueMapBuilder.cs" />
     <Compile Include="Model\Value\Coolant.cs" />
     <Compile Include="Model\Value\Iat.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Model\LogLine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\VeTableReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

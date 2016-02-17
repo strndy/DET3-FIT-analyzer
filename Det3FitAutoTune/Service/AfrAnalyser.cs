@@ -7,6 +7,13 @@ namespace Det3FitAutoTune.Service
 {
     public class AfrAnalyser
     {
+        private readonly TargerAfrMap _targerAfr;
+
+        public AfrAnalyser(TargerAfrMap targerAfr)
+        {
+            _targerAfr = targerAfr;
+        }
+
         public const float Stoich = 14.7f;
 
         /// <summary>
@@ -17,44 +24,47 @@ namespace Det3FitAutoTune.Service
         public ProjectedAfrCorrection[,] GetAverangeAfrCorrection(IEnumerable<LogLine>[,] allValues)
         {
             var ANALysed = new ProjectedAfrCorrection[16, 16];
-            for (var i = 0; i < 16; i++)
+            for (var rpmIndex = 0; rpmIndex < 16; rpmIndex++)
             {
-                for (var j = 0; j < 16; j++)
+                for (var kpaIndex = 0; kpaIndex < 16; kpaIndex++)
                 {
-                    var values = allValues[i, j];
+                    var values = allValues[rpmIndex, kpaIndex];
                     if (values == null) continue;
+                    var targetAfr = _targerAfr.GetTargetAfr(rpmIndex, kpaIndex);
 
-                    var correction = AverangeCorrection(values);
-                    ANALysed[i, j] = correction;
+                    var correction = AverangeCorrection(values, targetAfr);
+                    ANALysed[rpmIndex, kpaIndex] = correction;
                 }
             }
             return ANALysed;
         }
 
-        private ProjectedAfrCorrection AverangeCorrection(IEnumerable<LogLine> lines)
+        private ProjectedAfrCorrection AverangeCorrection(IEnumerable<LogLine> lines, float targetAfr)
         {
             //TODO target AFR per boost!
-            var wideband = new List<float>();
+            var widebandDiffPercent = new List<float>();
+            var widebandDiffAbsolute = new List<float>();
             var correction = new List<float>();
             var sumarized = new List<float>();
             var afr = new List<float>();
+            
 
             foreach (var logLine in lines)
             {
-                if (!(Math.Abs(logLine.AfrWideband.Value - Stoich) < 2)) continue;
                 if (logLine.AccEnr.Value > 5) continue;
-
-                wideband.Add(logLine.AfrWideband.Value/Stoich*100 - 100);
+                widebandDiffAbsolute.Add(targetAfr - logLine.AfrWideband.Value);
+                widebandDiffPercent.Add(logLine.AfrWideband.Value / targetAfr * 100 - 100);
                 correction.Add(logLine.AfrCorrection.Value);
-                sumarized.Add(wideband.Last() + correction.Last());
+                sumarized.Add(widebandDiffPercent.Last() + correction.Last());
                 afr.Add(logLine.AfrWideband.Value);
             }
-            return wideband.Count < MinValues ? null :  new ProjectedAfrCorrection()
+            return widebandDiffPercent.Count < MinValues ? null :  new ProjectedAfrCorrection()
             {
-                AfrDiff = wideband.Average(),
+                AfrDiffPercent = widebandDiffPercent.Average(),
+                AfrDiffAbsolute = widebandDiffAbsolute.Average(),
                 NboCorrection = correction.Average(),
                 SumValue = sumarized.Average(),
-                Count = wideband.Count,
+                Count = widebandDiffPercent.Count,
                 AvgAfr = afr.Average()
             };
         }

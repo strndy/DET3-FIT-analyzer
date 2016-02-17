@@ -13,30 +13,27 @@ namespace Det3FitAutoTune.Service
             _coords = coords;
         }
 
-        public void ShowMap(ProjectedAfrCorrection[,] data, ProjectedAfrCorrection.AfrCorrectionMethod type)
+        public void ShowVeMap(float[,] data)
         {
             for (int i = 15; i >= 0; i--)
             {
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.Write("{0, 5}", _coords.RpmMap[i]);
 
                 for (int j = 0; j < 16; j++)
                 {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    if (data[i, j] == null)
-                    {
-                        Console.Write(_format, "-");
-                    }
-                    else
-                    {
-                        this.ChangeColor(type, data[i, j].GetVal(type));
-                        var formatted = string.Format("{0:0.#}", data[i, j].GetVal(type));
-                        Console.Write(_format, formatted);
-                    }
+                    Console.ForegroundColor = ConsoleColor.Gray;
+
+                    ChangeColor(data[i, j]);
+                    var formatted = string.Format("{0:0.#}", data[i, j]);
+                    Console.Write(_format, formatted);
                     
                 }
                 Console.WriteLine();
             }
 
+            Console.Write(_format, "");
+            Console.ForegroundColor = ConsoleColor.Gray;
             for (int j = 0; j < 16; j++)
             {
                 Console.Write(_format, _coords.KpaMap[j]);
@@ -45,18 +42,79 @@ namespace Det3FitAutoTune.Service
             Console.WriteLine();
         }
 
-        private void ChangeColor(ProjectedAfrCorrection.AfrCorrectionMethod type, float number)
+        public void ShowAfrTarget(float[,] data)
         {
-            var redOver = 1.5f;
-            var yellowOver = 0.5f;
-            var greenUnder = -0.5f;
-            var blueUnder = -1.5f;
+            for (int i = 15; i >= 0; i--)
+            {
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("{0, 5}", _coords.RpmMap[i]);
+
+                for (int j = 0; j < 16; j++)
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+
+                    ChangeColor(data[i, j], ProjectedAfrCorrection.AfrCorrectionMethod.AvgAfr);
+                    var formatted = string.Format("{0:0.#}", data[i, j]);
+                    Console.Write(_format, formatted);
+
+                }
+                Console.WriteLine();
+            }
+
+            Console.Write(_format, "");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            for (int j = 0; j < 16; j++)
+            {
+                Console.Write(_format, _coords.KpaMap[j]);
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+
+        public void ShowAfrMap(ProjectedAfrCorrection[,] data, ProjectedAfrCorrection.AfrCorrectionMethod type)
+        {
+            for (int i = 15; i >= 0; i--)
+            {
+                Console.Write("{0, 5}", _coords.RpmMap[i]);
+
+                for (int j = 0; j < 16; j++)
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    if (data[i, j] == null)
+                    {
+                        Console.Write(_format, "-");
+                    }
+                    else
+                    {
+                        ChangeColor(data[i, j].GetVal(type), type);
+                        var formatted = string.Format("{0:0.#}", data[i, j].GetVal(type));
+                        Console.Write(_format, formatted);
+                    }
+                }
+                Console.WriteLine();
+            }
+
+            Console.Write(_format, "");
+            for (int j = 0; j < 16; j++)
+            {
+                Console.Write(_format, _coords.KpaMap[j]);
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+
+        private void ChangeColor(float number, ProjectedAfrCorrection.AfrCorrectionMethod? type = null)
+        {
+            var redOver = 2f;
+            var yellowOver = 0.7f;
+            var greenUnder = -0.7f;
+            var blueUnder = -2f;
 
             switch (type)
             {
                 case ProjectedAfrCorrection.AfrCorrectionMethod.AvgAfr:
                     redOver = 17f;
-                    yellowOver = 15.3f;
+                    yellowOver = 15.0f;
                     greenUnder = 14.2f;
                     blueUnder = 13f;
                     break;
@@ -64,16 +122,21 @@ namespace Det3FitAutoTune.Service
                     return;
                 case ProjectedAfrCorrection.AfrCorrectionMethod.NboCorrection:
                 case ProjectedAfrCorrection.AfrCorrectionMethod.FinalCorrection:
-                case ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiff:
+                case ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiffPercent:
                 case ProjectedAfrCorrection.AfrCorrectionMethod.SumValue:
                     break;
-
-
                 default:
-                    throw new ArgumentOutOfRangeException("type", type, null);
+                    redOver = 80;
+                    yellowOver = 65;
+                    greenUnder = 50;
+                    blueUnder = 45;
+                    break;
             }
-
-            if (number > redOver)
+            if (number < yellowOver && number > greenUnder)
+            {
+                Console.ForegroundColor = ConsoleColor.Gray;
+            } 
+            else if (number > redOver)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
@@ -81,13 +144,17 @@ namespace Det3FitAutoTune.Service
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
             }
+            else if (number < blueUnder)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+            }
             else if (number < greenUnder)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
             }
-            else if (number < blueUnder)
+            else
             {
-                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
         }
     }

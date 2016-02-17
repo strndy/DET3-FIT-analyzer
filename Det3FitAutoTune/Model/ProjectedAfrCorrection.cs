@@ -8,7 +8,8 @@ namespace Det3FitAutoTune.Model
 
         public int Count;
 
-        public float AfrDiff;
+        public float AfrDiffPercent;
+        public float AfrDiffAbsolute;
 
         public float NboCorrection;
 
@@ -16,15 +17,17 @@ namespace Det3FitAutoTune.Model
 
         public float FinalCorrection
         {
-            get { return AfrDiff*-1 + NboCorrection; }  
+            get { return AfrDiffPercent*-1 + NboCorrection; }  
         }
 
         public float GetVal(AfrCorrectionMethod method)
         {
             switch (method)
             {
-                case AfrCorrectionMethod.AfrDiff:
-                    return AfrDiff;
+                case AfrCorrectionMethod.AfrDiffPercent:
+                    return AfrDiffPercent;
+                case AfrCorrectionMethod.AfrDiffAbsolute:
+                    return AfrDiffAbsolute;
                 case AfrCorrectionMethod.AvgAfr:
                     return AvgAfr;
                 case AfrCorrectionMethod.Count:
@@ -44,7 +47,8 @@ namespace Det3FitAutoTune.Model
         {
             AvgAfr,
             Count,
-            AfrDiff,
+            AfrDiffPercent,
+            AfrDiffAbsolute,
             NboCorrection,
             SumValue,
             FinalCorrection

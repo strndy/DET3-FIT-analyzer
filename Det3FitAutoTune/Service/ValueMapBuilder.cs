@@ -41,8 +41,7 @@ namespace Det3FitAutoTune.Service
                 //fuel cut
                 if (logLine.Map.Value < 35 && logLine.Tps.Value < 3 && logLine.Rpm.Value > 1500) continue;
 
-                //TODO lambda delay (cca 100ms)
-
+                //lambda delay (cca 100ms)
                 if (i + LambdaDelay < log.Length)
                 {
                     //Console.WriteLine("Lambda diff: {0}", logLine.AfrWideband.Value - log[i + LambdaDelay].AfrWideband.Value);

@@ -16,22 +16,44 @@ namespace Det3FitAutoTune
 
         static void Main(string[] args)
         {
-            var logReader = new LogReader();
-            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016215_031.dlg");
 
             var coords = new MapCoordinates();
             var mapBuilder = new ValueMapBuilder(coords);
-            var analyser = new AfrAnalyser();
+            var targetAfr = new TargerAfrMap();
+            var analyser = new AfrAnalyser(targetAfr);
             var display = new MapShower(coords);
+            var logReader = new LogReader();
+            
+
+            var veTableReader = new VeTableReader();
+
+            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_real.bin");
+            var veTable = veTableReader.ReadTable(veTableBytes);
+
+            //Console.WriteLine("VE table");
+            //display.ShowVeMap(veTable);
+
+            Console.WriteLine("AfrTarget");
+            display.ShowAfrTarget(TargerAfrMap.AfrTargetMap);
+
+            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016215_031.dlg");
 
             var log = logReader.ReadLog(logBytes);
             var map = mapBuilder.BuildMap(log);
 
             var analysed = analyser.GetAverangeAfrCorrection(map);
 
-            display.ShowMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgAfr);
-            display.ShowMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiff);
-            display.ShowMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.NboCorrection);
+            Console.WriteLine("AfrDiffAbsolute");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiffAbsolute);
+
+            Console.WriteLine("AvgAfr");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgAfr);
+
+            Console.WriteLine("AfrPercentDiff");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiffPercent);
+
+            Console.WriteLine("NboCorrection");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.NboCorrection);
 
             return;
 
