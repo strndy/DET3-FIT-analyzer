@@ -13,7 +13,7 @@ namespace Det3FitAutoTune.Service
             _coords = coords;
         }
 
-        public void ShowVeMap(float[,] data)
+        public void ShowVeMap(float[,] data, ProjectedAfrCorrection.AfrCorrectionMethod? type = null)
         {
             for (int i = 15; i >= 0; i--)
             {
@@ -24,7 +24,7 @@ namespace Det3FitAutoTune.Service
                 {
                     Console.ForegroundColor = ConsoleColor.Gray;
 
-                    ChangeColor(data[i, j]);
+                    ChangeColor(data[i, j], type);
                     var formatted = string.Format("{0:0.#}", data[i, j]);
                     Console.Write(_format, formatted);
                     

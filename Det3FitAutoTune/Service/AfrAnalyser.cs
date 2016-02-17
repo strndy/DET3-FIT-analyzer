@@ -14,14 +14,12 @@ namespace Det3FitAutoTune.Service
             _targerAfr = targerAfr;
         }
 
-        public const float Stoich = 14.7f;
-
         /// <summary>
         /// Minimum values to take into account field 30- one second
         /// </summary>
         public const int MinValues = 30;
 
-        public ProjectedAfrCorrection[,] GetAverangeAfrCorrection(IEnumerable<LogLine>[,] allValues)
+        public ProjectedAfrCorrection[,] GetCorrection(IEnumerable<LogLine>[,] allValues)
         {
             var ANALysed = new ProjectedAfrCorrection[16, 16];
             for (var rpmIndex = 0; rpmIndex < 16; rpmIndex++)
@@ -41,7 +39,6 @@ namespace Det3FitAutoTune.Service
 
         private ProjectedAfrCorrection AverangeCorrection(IEnumerable<LogLine> lines, float targetAfr)
         {
-            //TODO target AFR per boost!
             var widebandDiffPercent = new List<float>();
             var widebandDiffAbsolute = new List<float>();
             var correction = new List<float>();

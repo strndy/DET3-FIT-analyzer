@@ -121,6 +121,7 @@
     <Compile Include="Model\LogLine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\VeTableCorrector.cs" />
     <Compile Include="Service\VeTableReader.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -23,6 +23,7 @@ namespace Det3FitAutoTune
             var analyser = new AfrAnalyser(targetAfr);
             var display = new MapShower(coords);
             var logReader = new LogReader();
+            var veTableCorrector = new VeTableCorrector();
             
 
             var veTableReader = new VeTableReader();
@@ -30,30 +31,45 @@ namespace Det3FitAutoTune
             var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_real.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            //Console.WriteLine("VE table");
-            //display.ShowVeMap(veTable);
-
-            Console.WriteLine("AfrTarget");
-            display.ShowAfrTarget(TargerAfrMap.AfrTargetMap);
-
             var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016215_031.dlg");
 
             var log = logReader.ReadLog(logBytes);
             var map = mapBuilder.BuildMap(log);
 
-            var analysed = analyser.GetAverangeAfrCorrection(map);
+            var analysed = analyser.GetCorrection(map);
+            float[,] finalCorrection;
+            var correctedVeTable = veTableCorrector.TuneVeTable(analysed, veTable, out finalCorrection);
 
-            Console.WriteLine("AfrDiffAbsolute");
-            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiffAbsolute);
+
+            Console.WriteLine("AfrTarget");
+            display.ShowAfrTarget(TargerAfrMap.AfrTargetMap);
 
             Console.WriteLine("AvgAfr");
             display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgAfr);
+
+            Console.WriteLine("AfrDiffAbsolute");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiffAbsolute);
 
             Console.WriteLine("AfrPercentDiff");
             display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiffPercent);
 
             Console.WriteLine("NboCorrection");
             display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.NboCorrection);
+
+            Console.WriteLine("VE table - original");
+            display.ShowVeMap(veTable);
+
+            Console.WriteLine("VE table - corrected");
+            display.ShowVeMap(correctedVeTable);
+
+            Console.WriteLine("VE table - delta");
+            display.ShowVeMap(finalCorrection, ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiffPercent);
+
+
+
+
+
+
 
             return;
 

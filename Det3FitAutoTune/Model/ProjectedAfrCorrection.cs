@@ -15,11 +15,6 @@ namespace Det3FitAutoTune.Model
 
         public float SumValue;
 
-        public float FinalCorrection
-        {
-            get { return AfrDiffPercent*-1 + NboCorrection; }  
-        }
-
         public float GetVal(AfrCorrectionMethod method)
         {
             switch (method)
@@ -36,8 +31,6 @@ namespace Det3FitAutoTune.Model
                     return NboCorrection;
                 case AfrCorrectionMethod.SumValue:
                     return SumValue;
-                case AfrCorrectionMethod.FinalCorrection:
-                    return FinalCorrection;
                 default:
                     throw new ArgumentOutOfRangeException("method", method, null);
             }
