@@ -14,7 +14,7 @@ namespace Det3FitAutoTune.Service
         /// <summary>
         /// Lambda delay in frames (1/30s = 33ms), innovate lambda delay is cca 100ms
         /// </summary>
-        public const int LambdaDelay = 3;
+        public const int LambdaDelay = 4;
 
         public ValueMapBuilder(MapCoordinates coord)
         {

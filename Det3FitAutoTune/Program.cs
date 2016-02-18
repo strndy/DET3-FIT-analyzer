@@ -28,10 +28,10 @@ namespace Det3FitAutoTune
 
             var veTableReader = new VeTableReader();
 
-            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_real.bin");
+            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_first_run.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016215_031.dlg");
+            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016218_1957.dlg");
 
             var log = logReader.ReadLog(logBytes);
             var map = mapBuilder.BuildMap(log);
@@ -56,20 +56,22 @@ namespace Det3FitAutoTune
             Console.WriteLine("NboCorrection");
             display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.NboCorrection);
 
+            Console.WriteLine("VE table - delta");
+            display.ShowVeMap(finalCorrection, ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiffPercent);
+
             Console.WriteLine("VE table - original");
             display.ShowVeMap(veTable);
 
             Console.WriteLine("VE table - corrected");
             display.ShowVeMap(correctedVeTable);
 
-            Console.WriteLine("VE table - delta");
-            display.ShowVeMap(finalCorrection, ProjectedAfrCorrection.AfrCorrectionMethod.AfrDiffPercent);
+            var bytes = veTableReader.GetBytes(correctedVeTable);
 
+            Console.WriteLine("VE table - corrected, rounded");
+            display.ShowVeMap(veTableReader.ReadTable(bytes));
 
-
-
-
-
+            
+            File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_corrected.bin", bytes);
 
             return;
 

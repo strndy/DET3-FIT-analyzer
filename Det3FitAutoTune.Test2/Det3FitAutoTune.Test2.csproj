@@ -73,6 +73,7 @@
     <Compile Include="TpsTest.cs" />
     <Compile Include="MapTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VeMapReadWriteTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Det3FitAutoTune\Det3FitAutoTune.csproj">
