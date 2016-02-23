@@ -17,7 +17,7 @@ namespace Det3FitAutoTune.Service
         /// <summary>
         /// Minimum values to take into account field 30 is one second
         /// </summary>
-        public const int MinValues = 15;
+        public const int MinValues = 10;
 
         public ProjectedAfrCorrection[,] GetCorrection(IEnumerable<LogLine>[,] allValues)
         {

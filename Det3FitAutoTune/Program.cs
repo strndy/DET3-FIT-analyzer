@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,18 +24,21 @@ namespace Det3FitAutoTune
             var analyser = new AfrAnalyser(targetAfr);
             var display = new MapShower(coords);
             var logReader = new LogReader();
-            var veTableCorrector = new VeTableCorrector();
+            var veTableCorrector = new VeTableCorrector(coords);
             
 
             var veTableReader = new VeTableReader();
 
-            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_first_run.bin");
+            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_real3.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016218_1957.dlg");
+            var logBytes2 = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016222_2058.dlg");
+            //var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016218_2015.dlg");
 
-            var log = logReader.ReadLog(logBytes);
-            var map = mapBuilder.BuildMap(log);
+            //IEnumerable<LogLine> log = logReader.ReadLog(logBytes);
+            IEnumerable<LogLine> log2 = logReader.ReadLog(logBytes2);
+
+            var map = mapBuilder.BuildMap(log2.ToArray());
 
             var analysed = analyser.GetCorrection(map);
             float[,] finalCorrection;
