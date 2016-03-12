@@ -17,7 +17,7 @@ namespace Det3FitAutoTune.Service
         /// <summary>
         /// Minimum values to take into account field 30 is one second
         /// </summary>
-        public const int MinValues = 10;
+        public const int MinValues = 30;
 
         public ProjectedAfrCorrection[,] GetCorrection(IEnumerable<LogLine>[,] allValues)
         {
@@ -44,6 +44,9 @@ namespace Det3FitAutoTune.Service
             var correction = new List<float>();
             var sumarized = new List<float>();
             var afr = new List<float>();
+
+            var avgRpm = new List<double>();
+            var avgKpa = new List<float>();
             
 
             foreach (var logLine in lines)
@@ -54,6 +57,8 @@ namespace Det3FitAutoTune.Service
                 correction.Add(logLine.AfrCorrection.Value);
                 sumarized.Add(widebandDiffPercent.Last() + correction.Last());
                 afr.Add(logLine.AfrWideband.Value);
+                avgRpm.Add(logLine.Rpm.Value);
+                avgKpa.Add(logLine.Map.Value);
             }
             return widebandDiffPercent.Count < MinValues ? null :  new ProjectedAfrCorrection()
             {
@@ -62,7 +67,9 @@ namespace Det3FitAutoTune.Service
                 NboCorrection = correction.Average(),
                 SumValue = sumarized.Average(),
                 Count = widebandDiffPercent.Count,
-                AvgAfr = afr.Average()
+                AvgAfr = afr.Average(),
+                AvgKpa = avgKpa.Average(),
+                AvgRPM = (float)Math.Round(avgRpm.Average())
             };
         }
     }

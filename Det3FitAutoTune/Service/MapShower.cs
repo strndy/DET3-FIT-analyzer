@@ -13,6 +13,7 @@ namespace Det3FitAutoTune.Service
             _coords = coords;
         }
 
+
         public void ShowVeMap(float[,] data, ProjectedAfrCorrection.AfrCorrectionMethod? type = null)
         {
             for (int i = 15; i >= 0; i--)

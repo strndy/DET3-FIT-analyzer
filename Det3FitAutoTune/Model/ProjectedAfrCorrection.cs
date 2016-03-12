@@ -15,6 +15,9 @@ namespace Det3FitAutoTune.Model
 
         public float SumValue;
 
+        public float AvgRPM;
+        public float AvgKpa;
+
         public float GetVal(AfrCorrectionMethod method)
         {
             switch (method)
@@ -31,6 +34,10 @@ namespace Det3FitAutoTune.Model
                     return NboCorrection;
                 case AfrCorrectionMethod.SumValue:
                     return SumValue;
+                case AfrCorrectionMethod.AvgKpa:
+                    return AvgKpa;
+                case AfrCorrectionMethod.AvgRpm:
+                    return AvgRPM;
                 default:
                     throw new ArgumentOutOfRangeException("method", method, null);
             }
@@ -44,7 +51,9 @@ namespace Det3FitAutoTune.Model
             AfrDiffAbsolute,
             NboCorrection,
             SumValue,
-            FinalCorrection
+            FinalCorrection,
+            AvgKpa,
+            AvgRpm,
         };
     }
 }

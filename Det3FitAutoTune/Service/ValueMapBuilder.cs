@@ -14,7 +14,7 @@ namespace Det3FitAutoTune.Service
         /// <summary>
         /// Lambda delay in frames (1/30s = 33ms), innovate lambda delay is cca 100ms
         /// </summary>
-        public const int LambdaDelay = 5;
+        public const int LambdaDelay = 4;
 
         public const int AfrCorrDelay = 1;
 
@@ -41,7 +41,9 @@ namespace Det3FitAutoTune.Service
                     continue;
                 }
                 //fuel cut
-                if (logLine.Map.Value < 35 && logLine.Tps.Value < 2 && logLine.Rpm.Value > 1500) continue;
+                if (logLine.Map.Value < 26 && logLine.Tps.Value < 1 && logLine.Rpm.Value > 1700) continue;
+
+                if (logLine.Rpm.Value < 1) continue;
 
                 if(Math.Abs(logLine.AfrCorrection.Value) < 0.1 && logLine.AfrWideband.Value > 22) continue;
 

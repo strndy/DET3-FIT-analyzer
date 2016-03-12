@@ -27,16 +27,19 @@ namespace Det3FitAutoTune.Service
                 {
                     var corr = corrections[rpmIndex, kpaIndex];
                     if (corr == null) continue;
-                    float coeficient;
+                    float coeficient = 1;
 
                     if (kpaIndex <= maxKpaForCorrection)
                     {
-                        coeficient = (corr.NboCorrection + (corr.AfrDiffPercent * 0.5f)) * BulharskaKonstanta;
+                        coeficient = (corr.NboCorrection + (corr.AfrDiffPercent * 0.3f)) * BulharskaKonstanta;
                     }
                     else
                     {
                         coeficient = corr.AfrDiffPercent * BulharskaKonstanta;
                     }
+
+                    //AFR only
+                    //coeficient = corr.AfrDiffPercent * BulharskaKonstanta;}}
 
                     var delta = correctedTable[rpmIndex, kpaIndex] * coeficient / 100;
                     finalCorrection[rpmIndex, kpaIndex] = delta;

@@ -29,13 +29,11 @@ namespace Det3FitAutoTune
 
             var veTableReader = new VeTableReader();
 
-            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_real3.bin");
+            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_03_12_0.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            var logBytes2 = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016222_2058.dlg");
-            //var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016218_2015.dlg");
+            var logBytes2 = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016311_1954.dlg");
 
-            //IEnumerable<LogLine> log = logReader.ReadLog(logBytes);
             IEnumerable<LogLine> log2 = logReader.ReadLog(logBytes2);
 
             var map = mapBuilder.BuildMap(log2.ToArray());
@@ -44,6 +42,14 @@ namespace Det3FitAutoTune
             float[,] finalCorrection;
             var correctedVeTable = veTableCorrector.TuneVeTable(analysed, veTable, out finalCorrection);
 
+            Console.WriteLine("Count");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.Count);
+
+            Console.WriteLine("AvgKpa");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgKpa);
+
+            Console.WriteLine("AvgRpm");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgRpm);
 
             Console.WriteLine("AfrTarget");
             display.ShowAfrTarget(TargerAfrMap.AfrTargetMap);
@@ -66,8 +72,8 @@ namespace Det3FitAutoTune
             Console.WriteLine("VE table - original");
             display.ShowVeMap(veTable);
 
-            Console.WriteLine("VE table - corrected");
-            display.ShowVeMap(correctedVeTable);
+            //Console.WriteLine("VE table - corrected");
+            //display.ShowVeMap(correctedVeTable);
 
             var bytes = veTableReader.GetBytes(correctedVeTable);
 
