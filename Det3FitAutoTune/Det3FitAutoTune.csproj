@@ -123,6 +123,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\VeTableCorrector.cs" />
     <Compile Include="Service\VeTableReader.cs" />
+    <Compile Include="Service\WidebandDelayCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

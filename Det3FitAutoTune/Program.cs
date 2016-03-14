@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Det3FitAutoTune.Model;
-using Det3FitAutoTune.Service;
 using Det3FitAutoTune.Model.Value;
+using Det3FitAutoTune.Service;
 
 namespace Det3FitAutoTune
 {
@@ -14,6 +14,15 @@ namespace Det3FitAutoTune
     {
         public const int samplesPerSec = 30;
         public const int lineLength = 40;
+
+        public const string VeTablesDir = @"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\";
+        public const string LogDir = @"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\";
+
+        
+        private static string GetLastFileFromDir(string dir)
+        {
+            return Directory.GetFiles(dir, "*").OrderByDescending(d => new FileInfo(d).LastWriteTime).First();
+        }
 
         static void Main(string[] args)
         {
@@ -25,18 +34,21 @@ namespace Det3FitAutoTune
             var display = new MapShower(coords);
             var logReader = new LogReader();
             var veTableCorrector = new VeTableCorrector(coords);
-            
+            var widebandDelayCalculator = new WidebandDelayCalculator(coords);
 
             var veTableReader = new VeTableReader();
 
-            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_03_12_0.bin");
+            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_03_13_2206.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            var logBytes2 = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016311_1954.dlg");
+            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016313_2131.dlg");
 
-            IEnumerable<LogLine> log2 = logReader.ReadLog(logBytes2);
+            IEnumerable<LogLine> log = logReader.ReadLog(logBytes);
 
-            var map = mapBuilder.BuildMap(log2.ToArray());
+            var logArray = log.ToArray();
+            var map = mapBuilder.BuildMap(logArray);
+
+            //var widebandDelay = widebandDelayCalculator.CalculateAfrDelay(logArray);
 
             var analysed = analyser.GetCorrection(map);
             float[,] finalCorrection;
@@ -45,11 +57,14 @@ namespace Det3FitAutoTune
             Console.WriteLine("Count");
             display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.Count);
 
-            Console.WriteLine("AvgKpa");
-            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgKpa);
+            //Console.WriteLine("AvgWidebandDelay");
+            //display.ShowAfrTarget(widebandDelay);
 
-            Console.WriteLine("AvgRpm");
-            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgRpm);
+            //Console.WriteLine("AvgKpa");
+            //display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgKpa);
+
+            //Console.WriteLine("AvgRpm");
+            //display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgRpm);
 
             Console.WriteLine("AfrTarget");
             display.ShowAfrTarget(TargerAfrMap.AfrTargetMap);
@@ -83,7 +98,7 @@ namespace Det3FitAutoTune
             
             File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_corrected.bin", bytes);
 
-            return;
+            //return;
 
             //var startBytes = logBytes.Take(12).ToArray();
 
@@ -100,8 +115,8 @@ namespace Det3FitAutoTune
 
             //var result = startBytes;
 
-            //var tps = new Tps { Value = 10 };
-            //var map = new Map { Value = 30 };
+            //var tps = new Tps { Value = 98 };
+            //var mapVal = new Map { Value = 30 };
 
             ////Temps are really rought
             //var iat = new Iat { Value = 42f };
@@ -116,7 +131,7 @@ namespace Det3FitAutoTune
             //for (var line = 0; line < howManyLines; line += 1)
             //{
             //    firstLine[LogReader.Index["Tps"]] = tps.Bytes;
-            //    firstLine[LogReader.Index["Map"]] = map.Bytes;
+            //    firstLine[LogReader.Index["Map"]] = mapVal.Bytes;
             //    firstLine[LogReader.Index["Iat"]] = iat.Bytes;
             //    firstLine[LogReader.Index["Coolant"]] = coolant.Bytes;
             //    firstLine[LogReader.Index["AfrCorrection"]] = afrCorr.Bytes;
@@ -137,9 +152,9 @@ namespace Det3FitAutoTune
             //    bits[5] = true;
             //    bits[6] = true;
             //    bits[7] = true;
-                
-            //    byte[] bytes = new byte[1];
-            //    bits.CopyTo(bytes, 0);
+
+            //    byte[] newBytes = new byte[1];
+            //    bits.CopyTo(newBytes, 0);
 
             //    firstLine[4] = (byte)line;
             //    firstLine[5] = (byte)line;

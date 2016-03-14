@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Det3FitAutoTune.Model;
 
 namespace Det3FitAutoTune.Service
