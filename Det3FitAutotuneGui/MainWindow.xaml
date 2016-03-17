@@ -1,6 +1,7 @@
 ﻿<Window x:Class="Det3FitAutotuneGui.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:det3FitAutotuneGui="clr-namespace:Det3FitAutotuneGui"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <TabControl>
@@ -10,64 +11,11 @@
             <TabItem Header="Analyze" Width="100">
                 <TabControl>
                     <TabItem Header="Target AFR" Width="80">
-                        <FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-                            <Table CellSpacing="5" Padding="15" FontFamily="Segoe UI">
-                                <Table.Columns>
-                                    <TableColumn/>
-                                    <TableColumn/>
-                                    <TableColumn/>
-                                    <TableColumn/>
-                                </Table.Columns>
-                                <TableRowGroup>
-                                    <TableRow>
-                                        <TableCell ColumnSpan="4" TextAlignment="Center">
-                                            <Paragraph FontWeight="Bold">.NET Framework 3.0</Paragraph>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell BorderBrush="Black" BorderThickness="2" Background="LightGray"
-        TextAlignment="Center" LineHeight="70">
-                                            <Paragraph FontWeight="Bold">WPF</Paragraph>
-                                        </TableCell>
-                                        <TableCell BorderBrush="Black" BorderThickness="2" Background="LightGray" TextAlignment="Center">
-                                            <Paragraph FontWeight="Bold">WCF</Paragraph>
-                                        </TableCell>
-                                        <TableCell BorderBrush="Black" BorderThickness="2" Background="LightGray"
-        TextAlignment="Center">
-                                            <Paragraph FontWeight="Bold">WF</Paragraph>
-                                        </TableCell>
-                                        <TableCell BorderBrush="Black" BorderThickness="2" Background="LightGray"
-        TextAlignment="Center">
-                                            <Paragraph FontWeight="Bold">WCS</Paragraph>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell BorderBrush="Black" BorderThickness="2" Background="LightGray"
-        TextAlignment="Center">
-                                            <Paragraph FontWeight="Bold">ADO.NET</Paragraph>
-                                        </TableCell>
-                                        <TableCell BorderBrush="Black" BorderThickness="2" Background="LightGray"
-        TextAlignment="Center">
-                                            <Paragraph FontWeight="Bold">ASP.NET</Paragraph>
-                                        </TableCell>
-                                        <TableCell BorderBrush="Black" BorderThickness="2" Background="LightGray"
-        TextAlignment="Center">
-                                            <Paragraph FontWeight="Bold">Windows Forms</Paragraph>
-                                        </TableCell>
-                                        <TableCell BorderBrush="Black" BorderThickness="2" Background="LightGray"
-        TextAlignment="Center">
-                                            <Paragraph FontWeight="Bold">...</Paragraph>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableRowGroup>
-                            </Table>
-                        </FlowDocument>
+                        <det3FitAutotuneGui:ValuesGrid Name="TargetAfr"></det3FitAutotuneGui:ValuesGrid>
                     </TabItem>
                     <TabItem Header="Actual AFR" Width="80"></TabItem>
                     <TabItem Header="AFR correction" Width="80"></TabItem>
                     <TabItem Header="VETable" Width="80"></TabItem>
-                    <Grid Margin="5"/>
                 </TabControl>
             </TabItem>
             <TabItem Header="Export" Width="100"/>
