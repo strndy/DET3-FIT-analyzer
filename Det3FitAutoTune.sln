@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1E2007
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Det3FitAutotuneGui", "Det3FitAutotuneGui\Det3FitAutotuneGui.csproj", "{14F9232F-D734-4464-B32E-9E38E4C97FA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{0ED32C42-DCF1-44D9-AA29-B7EC268F8DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ED32C42-DCF1-44D9-AA29-B7EC268F8DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ED32C42-DCF1-44D9-AA29-B7EC268F8DD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F9232F-D734-4464-B32E-9E38E4C97FA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F9232F-D734-4464-B32E-9E38E4C97FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F9232F-D734-4464-B32E-9E38E4C97FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F9232F-D734-4464-B32E-9E38E4C97FA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

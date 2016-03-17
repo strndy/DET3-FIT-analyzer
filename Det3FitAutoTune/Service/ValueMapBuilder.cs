@@ -38,15 +38,15 @@ namespace Det3FitAutoTune.Service
                 var rpmIndex = _coord.RpmIndex(logLine.Rpm.Value);
 
                 //cool engine
-                if (logLine.Coolant.Value < 60) continue;
+                if (logLine.Coolant.Value < 70) continue;
                 // acceleration enrichment
-                if (logLine.AccEnr.Value > 3)
+                if (logLine.AccEnr.Value > 5)
                 {
                     continue;
                 }
 
                 //fuel cut
-                if (logLine.Map.Value < 19 && logLine.Tps.Value < 1 && logLine.Rpm.Value > 1650) continue;
+                if (logLine.Map.Value < 20 && logLine.Tps.Value < 1 && logLine.Rpm.Value > 1650) continue;
 
                 //engine stop
                 if (logLine.Rpm.Value < 3) continue;

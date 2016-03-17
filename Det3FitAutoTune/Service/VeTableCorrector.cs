@@ -22,9 +22,9 @@ namespace Det3FitAutoTune.Service
 
             var maxKpaForCorrection = _mapCoordinates.KpaIndex(92);
 
-            for (int rpmIndex = 1; rpmIndex < 16; rpmIndex++)
+            for (int rpmIndex = 0; rpmIndex < 16; rpmIndex++)
             {
-                for (int kpaIndex = 1; kpaIndex < 16; kpaIndex++)
+                for (int kpaIndex = 0; kpaIndex < 16; kpaIndex++)
                 {
                     var corr = corrections[rpmIndex, kpaIndex];
                     if (corr == null) continue;

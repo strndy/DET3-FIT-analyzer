@@ -38,10 +38,10 @@ namespace Det3FitAutoTune
 
             var veTableReader = new VeTableReader();
 
-            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_03_13_2206.bin");
+            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_03_17_2032.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016313_2131.dlg");
+            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016317_2033.dlg");
 
             IEnumerable<LogLine> log = logReader.ReadLog(logBytes);
 
