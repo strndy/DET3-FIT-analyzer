@@ -34,14 +34,14 @@ namespace Det3FitAutoTune
             var display = new MapShower(coords);
             var logReader = new LogReader();
             var veTableCorrector = new VeTableCorrector(coords);
-            var widebandDelayCalculator = new WidebandDelayCalculator(coords);
+            //var widebandDelayCalculator = new WidebandDelayCalculator(coords);
 
             var veTableReader = new VeTableReader();
 
-            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_03_17_2032.bin");
+            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_03_23_1921.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016317_2033.dlg");
+            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016323_1921.dlg");
 
             IEnumerable<LogLine> log = logReader.ReadLog(logBytes);
 

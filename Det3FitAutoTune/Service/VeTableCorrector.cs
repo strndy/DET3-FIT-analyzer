@@ -52,7 +52,7 @@ namespace Det3FitAutoTune.Service
 
         private float GetImportance(int count)
         {
-            var importance = Math.Log10(count) * 0.5 + 0.1;
+            var importance = Math.Log(count, 10) * 0.5 + 0.01;
 
             if (importance < 0)
             {
