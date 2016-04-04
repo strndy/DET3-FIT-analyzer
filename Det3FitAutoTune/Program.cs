@@ -38,12 +38,14 @@ namespace Det3FitAutoTune
 
             var veTableReader = new VeTableReader();
 
-            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_03_23_1921.bin");
+            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_04_03_2100.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016323_1921.dlg");
+            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_201643_213.dlg");
 
             IEnumerable<LogLine> log = logReader.ReadLog(logBytes);
+
+            
 
             var logArray = log.ToArray();
             var map = mapBuilder.BuildMap(logArray);
@@ -60,11 +62,11 @@ namespace Det3FitAutoTune
             //Console.WriteLine("AvgWidebandDelay");
             //display.ShowAfrTarget(widebandDelay);
 
-            //Console.WriteLine("AvgKpa");
-            //display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgKpa);
+            Console.WriteLine("AvgKpa");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgKpa);
 
-            //Console.WriteLine("AvgRpm");
-            //display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgRpm);
+            Console.WriteLine("AvgRpm");
+            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgRpm);
 
             Console.WriteLine("AfrTarget");
             display.ShowAfrTarget(TargerAfrMap.AfrTargetMap);
@@ -98,49 +100,61 @@ namespace Det3FitAutoTune
             
             File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_corrected.bin", bytes);
 
-            //return;
+            return;
 
-            //var startBytes = logBytes.Take(12).ToArray();
+            var startBytes = logBytes.Take(12).ToArray();
 
-            //var timeInSeconds = 10;
-            //var howManyLines = (samplesPerSec * timeInSeconds);
+            var timeInSeconds = 100;
+            var howManyLines = (samplesPerSec * timeInSeconds);
 
-            //var firstLine = logBytes.Skip(12 + 40 * 10).Take(40).ToArray();
-            //var hex = BitConverter.ToString(firstLine);
-            //Console.WriteLine(hex);
-            //Console.WriteLine(Encoding.ASCII.GetChars(firstLine, 0, lineLength));
+            var firstLine = logBytes.Skip(12 + 40 * 10).Take(40).ToArray();
+            var hex = BitConverter.ToString(firstLine);
+            Console.WriteLine(hex);
+            Console.WriteLine(Encoding.ASCII.GetChars(firstLine, 0, lineLength));
 
-            //var value = BitConverter.ToInt16(firstLine, 0);
-            //Console.WriteLine(value);
+            var value = BitConverter.ToInt16(firstLine, 0);
+            Console.WriteLine(value);
 
-            //var result = startBytes;
+            var result = startBytes;
 
-            //var tps = new Tps { Value = 98 };
-            //var mapVal = new Map { Value = 30 };
+            var tps = new Tps { Value = 98 };
+            var mapVal = new Map { Value = 180};
 
-            ////Temps are really rought
-            //var iat = new Iat { Value = 42f };
-            //var coolant = new Coolant { Value = 42f };
-            //var afrCorr = new AfrCorrection() { Value = 13 };
+            //Temps are really rought
+            var iat = new Iat { Value = 42f };
+            var coolant = new Coolant { Value = 80f };
+            var afrCorr = new AfrCorrection() { Value = 15 };
 
-            //var afrWideband = new AfrWideband { Value = (float)14.7 };
-            //var accEnr = new AccEnr() { Value = (float)12.3 };
+            var afrWideband = new AfrWideband { Value = 16f };
+            var accEnr = new AccEnr() { Value = 0 };
 
-            //var rpm = BitConverter.GetBytes(1234);
+            var rpm = BitConverter.GetBytes(1500);
 
-            //for (var line = 0; line < howManyLines; line += 1)
-            //{
-            //    firstLine[LogReader.Index["Tps"]] = tps.Bytes;
-            //    firstLine[LogReader.Index["Map"]] = mapVal.Bytes;
-            //    firstLine[LogReader.Index["Iat"]] = iat.Bytes;
-            //    firstLine[LogReader.Index["Coolant"]] = coolant.Bytes;
-            //    firstLine[LogReader.Index["AfrCorrection"]] = afrCorr.Bytes;
-            //    firstLine[LogReader.Index["AfrWideband"]] = afrWideband.Bytes;
-            //    firstLine[LogReader.Index["AccEnr"]] = accEnr.Bytes;
+            for (var line = 0; line < howManyLines; line += 1)
+            {
+                afrWideband.Value = 10 + line * 4 / 1000;
+                rpm = BitConverter.GetBytes(line*4);
+                try
+                {
+                    mapVal.Value = line/10;
+                    
+                }
+                catch (Exception)
+                {
+                    mapVal.Value = 100;
+                }
+                
+                firstLine[LogReader.Index["Tps"]] = tps.Bytes;
+                firstLine[LogReader.Index["Map"]] = mapVal.Bytes;
+                firstLine[LogReader.Index["Iat"]] = iat.Bytes;
+                firstLine[LogReader.Index["Coolant"]] = coolant.Bytes;
+                firstLine[LogReader.Index["AfrCorrection"]] = afrCorr.Bytes;
+                firstLine[LogReader.Index["AfrWideband"]] = afrWideband.Bytes;
+                firstLine[LogReader.Index["AccEnr"]] = accEnr.Bytes;
 
-            //    //RPM
-            //    firstLine[10] = rpm[0];
-            //    firstLine[11] = rpm[1];
+                //RPM
+                firstLine[10] = rpm[0];
+                firstLine[11] = rpm[1];
 
 
             //    var bits = new BitArray(8);
@@ -156,6 +170,7 @@ namespace Det3FitAutoTune
             //    byte[] newBytes = new byte[1];
             //    bits.CopyTo(newBytes, 0);
 
+            //firstLine[1] = (byte)line;
             //    firstLine[4] = (byte)line;
             //    firstLine[5] = (byte)line;
             //    firstLine[6] = (byte)line;
@@ -165,10 +180,10 @@ namespace Det3FitAutoTune
             //    firstLine[13] = (byte)line;
             //    firstLine[15] = (byte)line;
             //    firstLine[20] = (byte)line;
-            //    result = result.Concat(firstLine).ToArray();
-            //}
+                result = result.Concat(firstLine).ToArray();
+            }
 
-            //File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_mine.dlg", result);
+            File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_mine.dlg", result);
         }
     }
 }

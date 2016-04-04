@@ -4,7 +4,7 @@
     {
         protected override byte Bytes1
         {
-            get { return 30; }
+            get { return 40; }
         }
 
         protected override float Val1
@@ -19,13 +19,7 @@
 
         protected override float Val2
         {
-            get { return 216; }
+            get { return 206; }
         }
-
-        /// <summary>
-        /// 0 = -6 kpa
-        /// 65535 (ushort.MaxVal) = 253 
-        /// </summary>
-
     }
 }

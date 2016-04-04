@@ -26,5 +26,20 @@ namespace Det3FitAutoTune.Extension
 
             return closestIndex;
         }
+
+        public static uint UpToIndex(this int[] collection, float target)
+        {
+            for (uint i = 0; i <= collection.Length; i++)
+            {
+                var element = collection[i];
+                if (target < element)
+                {
+                    uint result = checked (i + 1);
+                    return result;
+                }
+            }
+
+            return 0;
+        }
     }
 }

@@ -102,6 +102,7 @@
   <ItemGroup>
     <Compile Include="Extension\CollectionExtension.cs" />
     <Compile Include="Model\ProjectedAfrCorrection.cs" />
+    <Compile Include="Model\WeightedLocation.cs" />
     <Compile Include="Service\AfrAnalyser.cs" />
     <Compile Include="Service\MapCoordinates.cs" />
     <Compile Include="Model\Value\AbstractByteField.cs" />

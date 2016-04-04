@@ -12,7 +12,7 @@ namespace Det3FitAutoTune.Service
             _mapCoordinates = mapCoordinates;
         }
 
-        public const float BulharskaKonstanta = 0.9f;
+        public const float BulharskaKonstanta = 0.8f;
 
         public float[,] TuneVeTable(ProjectedAfrCorrection[,] corrections, float[,] veTable, out float[,] finalCorrection)
         {

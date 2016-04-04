@@ -17,9 +17,10 @@ namespace Det3FitAutoTune.Service
         public static readonly int[] LambdaDelay = new int[16]
         {
             4,4,4,5,5,6,6,6,6,7,7,7,7,7,7,7
+            //10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10
         };
 
-        public const int AfrCorrDelay = 1;
+        public const int AfrCorrDelay = 0;
 
         public ValueMapBuilder(MapCoordinates coord)
         {
@@ -34,8 +35,8 @@ namespace Det3FitAutoTune.Service
             for (int i = 0; i < log.Length - 1; i++)
             {
                 var logLine = log[i];
-                var kpaIndex = _coord.KpaIndex(logLine.Map.Value);
-                var rpmIndex = _coord.RpmIndex(logLine.Rpm.Value);
+                var kpaIndex = _coord.KpaIndex(logLine.Map.Value - 10f);
+                var rpmIndex = _coord.RpmIndex(logLine.Rpm.Value + 250);
 
                 //cool engine
                 if (logLine.Coolant.Value < 70) continue;
@@ -46,7 +47,7 @@ namespace Det3FitAutoTune.Service
                 }
 
                 //fuel cut
-                if (logLine.Map.Value < 20 && logLine.Tps.Value < 1 && logLine.Rpm.Value > 1650) continue;
+                if (logLine.Map.Value < 18 && logLine.Tps.Value < 1 && logLine.Rpm.Value > 1650) continue;
 
                 //engine stop
                 if (logLine.Rpm.Value < 3) continue;
@@ -59,11 +60,13 @@ namespace Det3FitAutoTune.Service
                     logLine.AfrCorrection.Bytes = log[i + AfrCorrDelay].AfrCorrection.Bytes;
                 }
 
+                var lambdaDelay = LambdaDelay[rpmIndex];
+                //var lambdaDelay = 0;
                 //lambda delay (cca 100ms)
-                if (i + LambdaDelay[rpmIndex] < log.Length)
+                if (i + lambdaDelay < log.Length)
                 {
                     //Console.WriteLine("Lambda diff: {0}", logLine.AfrWideband.Value - log[i + LambdaDelay].AfrWideband.Value);
-                    logLine.AfrWideband.Bytes = log[i + LambdaDelay[rpmIndex]].AfrWideband.Bytes;
+                    logLine.AfrWideband.Bytes = log[i + lambdaDelay].AfrWideband.Bytes;
                 }
 
 
