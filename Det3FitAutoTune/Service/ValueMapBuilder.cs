@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Det3FitAutoTune.Model;
-using Det3FitAutoTune.Model.Value;
 
 namespace Det3FitAutoTune.Service
 {
@@ -16,7 +14,9 @@ namespace Det3FitAutoTune.Service
         /// </summary>
         public static readonly int[] LambdaDelay = new int[16]
         {
-            4,4,4,5,5,6,6,6,6,7,7,7,7,7,7,7
+            4,4,4,3,3,3,3,2,2,2,2,2,2,2,2,2
+            //5,5,5,5,5,5,5,4,4,4,3,3,3,3,3,3
+            //4,4,4,5,5,6,6,6,6,7,7,7,7,7,7,7
             //10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10
         };
 
@@ -29,17 +29,15 @@ namespace Det3FitAutoTune.Service
 
         public IEnumerable<LogLine>[,] BuildMap(LogLine[] log)
         {
-            var logArray = log.ToArray();
             var map = new List<LogLine>[16,16];
 
             for (int i = 0; i < log.Length - 1; i++)
             {
                 var logLine = log[i];
-                var kpaIndex = _coord.KpaIndex(logLine.Map.Value - 10f);
-                var rpmIndex = _coord.RpmIndex(logLine.Rpm.Value + 250);
 
                 //cool engine
                 if (logLine.Coolant.Value < 70) continue;
+
                 // acceleration enrichment
                 if (logLine.AccEnr.Value > 5)
                 {
@@ -47,7 +45,7 @@ namespace Det3FitAutoTune.Service
                 }
 
                 //fuel cut
-                if (logLine.Map.Value < 18 && logLine.Tps.Value < 1 && logLine.Rpm.Value > 1650) continue;
+                if (logLine.Map.Value < 20 && logLine.Tps.Value < 2 && logLine.Rpm.Value > 1650) continue;
 
                 //engine stop
                 if (logLine.Rpm.Value < 3) continue;
@@ -60,6 +58,7 @@ namespace Det3FitAutoTune.Service
                     logLine.AfrCorrection.Bytes = log[i + AfrCorrDelay].AfrCorrection.Bytes;
                 }
 
+                var rpmIndex = _coord.RpmIndex(logLine.Rpm.Value);
                 var lambdaDelay = LambdaDelay[rpmIndex];
                 //var lambdaDelay = 0;
                 //lambda delay (cca 100ms)
@@ -70,11 +69,18 @@ namespace Det3FitAutoTune.Service
                 }
 
 
-                if (map[rpmIndex, kpaIndex] == null)
+                var weightedLocations = _coord.GetWeightedLocations(logLine);
+                foreach (var weightedLocation in weightedLocations)
                 {
-                    map[rpmIndex, kpaIndex] = new List<LogLine>();
+                    if (map[weightedLocation.RpmIndex, weightedLocation.KpaIndex] == null)
+                    {
+                        map[weightedLocation.RpmIndex, weightedLocation.KpaIndex] = new List<LogLine>();
+                    }
+
+                    logLine.ProximityIndex = weightedLocation.ProximityIndex;
+                    map[weightedLocation.RpmIndex, weightedLocation.KpaIndex].Add(logLine);                    
                 }
-                map[rpmIndex, kpaIndex].Add(logLine);
+                
             }
 
             return map;

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Det3FitAutoTune.Model.Value;
+﻿using Det3FitAutoTune.Model.Value;
 
 namespace Det3FitAutoTune.Model
 {
@@ -13,5 +12,7 @@ namespace Det3FitAutoTune.Model
         public Map Map;
         public Rpm Rpm;
         public Tps Tps;
+
+        public float ProximityIndex;
     }
 }

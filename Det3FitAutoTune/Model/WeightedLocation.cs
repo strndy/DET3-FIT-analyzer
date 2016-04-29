@@ -6,6 +6,6 @@
 
         public int RpmIndex;
 
-        public float Importance;
+        public float ProximityIndex;
     }
 }

@@ -71,6 +71,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CoordsTest.cs" />
+    <Compile Include="MapCoordinatesTests.cs" />
     <Compile Include="TpsTest.cs" />
     <Compile Include="MapTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

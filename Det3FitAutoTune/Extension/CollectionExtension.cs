@@ -41,5 +41,22 @@ namespace Det3FitAutoTune.Extension
 
             return 0;
         }
+
+        public static double WeightedAverage<T>(this IEnumerable<T> records, Func<T, float> value, Func<T, float> weight)
+        {
+            var sums = records.Average(value);
+            var weSums = records.Sum(weight);
+            var weightedValueSum = records.Sum(x => value(x) * weight(x));
+            var weightSum = records.Sum(weight);
+
+            if (Math.Abs(weightSum) > 0.001)
+            {
+                var result = weightedValueSum/weightSum;
+                return result;
+            }
+            else
+                throw new DivideByZeroException("Your message here");
+        }
+
     }
 }

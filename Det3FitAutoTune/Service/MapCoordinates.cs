@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Det3FitAutoTune.Extension;
 using Det3FitAutoTune.Model;
+using Det3FitAutoTune.Model.Value;
 
 namespace Det3FitAutoTune.Service
 {
@@ -10,8 +11,10 @@ namespace Det3FitAutoTune.Service
     {
         public const int KpaMin = 25;
         public const int KpaMax = 225;
+        private static float _realKpaOffset = (KpaMax - KpaMin) / (16);
 
         public const int RpmMax = 8000;
+        private static int _realRpmOffset = RpmMax / (16 * 2);
 
         private static int[] _kpaMap;
         private static int[] _rpmMap;
@@ -55,12 +58,12 @@ namespace Det3FitAutoTune.Service
 
         public int RpmIndex(float value)
         {
-            return RpmMap.ClosestToIndex(value);
+            return RpmMap.ClosestToIndex(value + _realRpmOffset);
         }
 
         public int KpaIndex(float value)
         {
-            return KpaMap.ClosestToIndex(value);
+            return KpaMap.ClosestToIndex(value - _realKpaOffset);
         }
 
         public IEnumerable<WeightedLocation> GetWeightedLocations(LogLine logLine)
@@ -70,56 +73,65 @@ namespace Det3FitAutoTune.Service
 
             var locations = new List<WeightedLocation>();
 
-            for (int kpa = SafeIndex(baseKpaIndex - 1); kpa < SafeIndex(baseKpaIndex + 1); kpa++)
+            for (int kpaI = SafeIndex(baseKpaIndex - 2); kpaI <= SafeIndex(baseKpaIndex + 2); kpaI++)
             {
-                for (int rpm = SafeIndex(baseRpmIndex - 1); rpm < SafeIndex(baseRpmIndex + 1); rpm++)
+                for (int rpmI = SafeIndex(baseRpmIndex - 2); rpmI <= SafeIndex(baseRpmIndex + 2); rpmI++)
                 {
-                    var location = new WeightedLocation()
+                    var location = new WeightedLocation
                     {
-                        KpaIndex = kpa,
-                        RpmIndex = rpm,
-                        Importance = GetImportance(kpa, rpm, logLine)
+                        KpaIndex = kpaI,
+                        RpmIndex = rpmI,
+                        ProximityIndex = CalcProximityIndex(kpaI, rpmI, logLine)
                     };
-                    if (location.Importance > 0.1)
+                    if (location.ProximityIndex > 0.05)
                     {
                         locations.Add(location);    
                     }
-                }    
+                }
+            }
+
+            if (locations.Count == 1)
+            {
+                locations[0].ProximityIndex = 1;
             }
 
             return locations;
         }
 
-        public float GetImportance(int kpa, int rpm, LogLine logLine)
+        public float CalcProximityIndex(int kpaI, int rpmI, LogLine logLine)
         {
             var exactRpmIndex = ExactRpmIndex(logLine);
             var exactKpaIndex = ExactKpaIndex(logLine);
 
-            throw new NotImplementedException();
+            var kpaDiff = Math.Abs(kpaI - exactKpaIndex + 0.5);
+            var rpmDiff = Math.Abs(rpmI - exactRpmIndex + 0.5);
+
+            var distance = Math.Sqrt(Math.Pow(kpaDiff, 2) + Math.Pow(rpmDiff, 2));
+
+            //var index = (float)Math.Log(1 / distance, 10);
+            //return Math.Min(1, Math.Max(0, index));
+
+            if (distance < 1)
+            {
+                return (float) (1 - distance);
+            }
+
+            return 0;
         }
 
         public float ExactRpmIndex(LogLine logLine)
         {
-            return (logLine.Rpm.Value / RpmMax) * 16 - 1;
+            return ((logLine.Rpm.Value + _realRpmOffset) / RpmMax) * 16 - 1;
         }
 
         public float ExactKpaIndex(LogLine logLine)
         {
-            return (logLine.Map.Value / (KpaMax - KpaMin)) * 16 - 1;
+            return (logLine.Map.Value - _realKpaOffset) / (KpaMax - KpaMin) * 16 - 1;
         }
 
         private static int SafeIndex(int index)
         {
-            if (index > 15)
-            {
-                return 15;
-            }
-            if (index < 0)
-            {
-                return 0;
-            }
-
-            return index;
+            return Math.Min(15, Math.Max(0, index));
         }
     }
 }

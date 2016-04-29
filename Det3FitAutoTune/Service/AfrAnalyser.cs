@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Det3FitAutoTune.Extension;
 using Det3FitAutoTune.Model;
 
 namespace Det3FitAutoTune.Service
@@ -17,7 +18,7 @@ namespace Det3FitAutoTune.Service
         /// <summary>
         /// Minimum values to take into account field 30 is one second
         /// </summary>
-        public const int MinValues = 1;
+        public const int MinValues = 10;
 
         public ProjectedAfrCorrection[,] GetCorrection(IEnumerable<LogLine>[,] allValues)
         {
@@ -39,37 +40,30 @@ namespace Det3FitAutoTune.Service
 
         private ProjectedAfrCorrection AverangeCorrection(IEnumerable<LogLine> lines, float targetAfr)
         {
-            var widebandDiffPercent = new List<float>();
-            var widebandDiffAbsolute = new List<float>();
-            var correction = new List<float>();
-            var sumarized = new List<float>();
-            var afr = new List<float>();
-
-            var avgRpm = new List<double>();
-            var avgKpa = new List<float>();
-            
-
-            foreach (var logLine in lines)
+            return new ProjectedAfrCorrection()
             {
-                if (logLine.AccEnr.Value > 5) continue;
-                widebandDiffAbsolute.Add(targetAfr - logLine.AfrWideband.Value);
-                widebandDiffPercent.Add(logLine.AfrWideband.Value / targetAfr * 100 - 100);
-                correction.Add(logLine.AfrCorrection.Value);
-                sumarized.Add(widebandDiffPercent.Last() + correction.Last());
-                afr.Add(logLine.AfrWideband.Value);
-                avgRpm.Add(logLine.Rpm.Value);
-                avgKpa.Add(logLine.Map.Value);
-            }
-            return widebandDiffPercent.Count < MinValues ? null :  new ProjectedAfrCorrection()
-            {
-                AfrDiffPercent = widebandDiffPercent.Average(),
-                AfrDiffAbsolute = widebandDiffAbsolute.Average(),
-                NboCorrection = correction.Average(),
-                SumValue = sumarized.Average(),
-                Count = widebandDiffPercent.Count,
-                AvgAfr = afr.Average(),
-                AvgKpa = avgKpa.Average(),
-                AvgRPM = (float)Math.Round(avgRpm.Average())
+                AfrDiffPercent = (float)lines.WeightedAverage(
+                    l => (l.AfrWideband.Value / targetAfr) * 100 - 100,
+                    l => l.ProximityIndex),
+                //widebandDiffPercent.Average(),
+
+                AfrDiffAbsolute = (float) lines.WeightedAverage(
+                    l => targetAfr - l.AfrWideband.Value, 
+                    l => l.ProximityIndex), //widebandDiffAbsolute.Average(),
+
+                NboCorrection = (float) lines.WeightedAverage(
+                    l => l.AfrCorrection.Value,
+                    l => l.ProximityIndex
+                ),
+
+                Count = lines.Count(),
+
+                AvgAfr = (float)lines.WeightedAverage(
+                    l => l.AfrWideband.Value,
+                    l => l.ProximityIndex
+                ),
+                AvgKpa = lines.Average(l => l.Map.Value),
+                AvgRpm = (int)lines.Average(l => l.Rpm.Value)
             };
         }
     }

@@ -32,7 +32,7 @@ namespace Det3FitAutoTune.Service
 
                     if (kpaIndex <= maxKpaForCorrection)
                     {
-                        coeficient = (corr.NboCorrection + (corr.AfrDiffPercent*0.5f))  * GetImportance(corr.Count) * BulharskaKonstanta;
+                        coeficient = (corr.NboCorrection + (corr.AfrDiffPercent * 0.5f)) * GetImportance(corr.Count) * BulharskaKonstanta;
                     }
                     else
                     {
@@ -42,7 +42,7 @@ namespace Det3FitAutoTune.Service
                     //AFR only
                     //coeficient = corr.AfrDiffPercent * BulharskaKonstanta;}}
 
-                    var delta = correctedTable[rpmIndex, kpaIndex]*coeficient/100;
+                    var delta = correctedTable[rpmIndex, kpaIndex] * coeficient / 100;
                     finalCorrection[rpmIndex, kpaIndex] = delta;
                     correctedTable[rpmIndex, kpaIndex] += delta;
                 }
