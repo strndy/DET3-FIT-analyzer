@@ -38,14 +38,17 @@ namespace Det3FitAutoTune
 
             var veTableReader = new VeTableReader();
 
-            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_04_17_1100.bin");
+            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_07_10.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016417_169.dlg");
-
+            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016710_2339.dlg");
             IEnumerable<LogLine> log = logReader.ReadLog(logBytes);
+            var logBytes2 = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016710_2340.dlg");
+            IEnumerable<LogLine> log2 = logReader.ReadLog(logBytes);
+            //var logBytes3 = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016528_1814_CESTA_zpet.dlg");
+            //IEnumerable<LogLine> log3 = logReader.ReadLog(logBytes);
 
-            
+            log = log.Concat(log2);
 
             var logArray = log.ToArray();
             var map = mapBuilder.BuildMap(logArray);
@@ -56,17 +59,26 @@ namespace Det3FitAutoTune
             float[,] finalCorrection;
             var correctedVeTable = veTableCorrector.TuneVeTable(analysed, veTable, out finalCorrection);
 
+            var maxBoost = log.OrderByDescending(l => l.Map.Value).First();
+            Console.WriteLine("Max boost: {0}kpa @ {1}rpm", maxBoost.Map.Value, maxBoost.Rpm.Value);
+
+            var maxClt = log.Max(l => l.Coolant.Value);
+            Console.WriteLine("Max clt: {0}° C", maxClt);
+
+            var maxIat = log.Max(l => l.Iat.Value);
+            Console.WriteLine("Max IAT: {0}° C", maxIat);
+
             Console.WriteLine("Count");
             display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.Count);
 
             //Console.WriteLine("AvgWidebandDelay");
             //display.ShowAfrTarget(widebandDelay);
 
-            Console.WriteLine("AvgKpa");
-            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgKpa);
+            //Console.WriteLine("AvgKpa");
+            //display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgKpa);
 
-            Console.WriteLine("AvgRpm");
-            display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgRpm);
+            //Console.WriteLine("AvgRpm");
+            //display.ShowAfrMap(analysed, ProjectedAfrCorrection.AfrCorrectionMethod.AvgRpm);
 
             Console.WriteLine("AfrTarget");
             display.ShowAfrTarget(TargerAfrMap.AfrTargetMap);

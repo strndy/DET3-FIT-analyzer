@@ -70,6 +70,14 @@ namespace Det3FitAutoTune.Service
 
 
                 var weightedLocations = _coord.GetWeightedLocations(logLine);
+
+                var topOne = weightedLocations.OrderByDescending(w => w.ProximityIndex).FirstOrDefault();
+                //if (topOne != null)
+                //{
+                //    topOne.ProximityIndex = 1;    
+                //}
+                
+
                 foreach (var weightedLocation in weightedLocations)
                 {
                     if (map[weightedLocation.RpmIndex, weightedLocation.KpaIndex] == null)
@@ -78,8 +86,10 @@ namespace Det3FitAutoTune.Service
                     }
 
                     logLine.ProximityIndex = weightedLocation.ProximityIndex;
-                    map[weightedLocation.RpmIndex, weightedLocation.KpaIndex].Add(logLine);                    
+                    map[weightedLocation.RpmIndex, weightedLocation.KpaIndex].Add(logLine);          
                 }
+
+                
                 
             }
 
