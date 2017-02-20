@@ -15,10 +15,12 @@ namespace Det3FitAutoTune
         public const int samplesPerSec = 30;
         public const int lineLength = 40;
 
-        public const string VeTablesDir = @"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\";
-        public const string LogDir = @"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\";
-
+        public const string VeTablesDir = @"C:\dev\repos\DET3-FIT-analyzer\Samples\tables\";
+        public const string LogDir = @"C:\dev\repos\DET3-FIT-analyzer\Samples\";
+        public const string ExportDir = @"C:\dev\repos\DET3-FIT-analyzer\Samples\tables\";
         
+
+
         private static string GetLastFileFromDir(string dir)
         {
             return Directory.GetFiles(dir, "*").OrderByDescending(d => new FileInfo(d).LastWriteTime).First();
@@ -38,17 +40,17 @@ namespace Det3FitAutoTune
 
             var veTableReader = new VeTableReader();
 
-            var veTableBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_07_10.bin");
+            var veTableBytes = File.ReadAllBytes(VeTablesDir + "VETable_2017220_1021.bin");
             var veTable = veTableReader.ReadTable(veTableBytes);
 
-            var logBytes = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016710_2339.dlg");
-            IEnumerable<LogLine> log = logReader.ReadLog(logBytes);
-            var logBytes2 = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016710_2340.dlg");
-            IEnumerable<LogLine> log2 = logReader.ReadLog(logBytes);
+            var logBytes = File.ReadAllBytes(LogDir + "log_2017220_1021.dlg");
+            IEnumerable <LogLine> log = logReader.ReadLog(logBytes);
+            //var logBytes2 = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016710_2340.dlg");
+            //IEnumerable<LogLine> log2 = logReader.ReadLog(logBytes);
             //var logBytes3 = File.ReadAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_2016528_1814_CESTA_zpet.dlg");
             //IEnumerable<LogLine> log3 = logReader.ReadLog(logBytes);
 
-            log = log.Concat(log2);
+            //log = log.Concat(log2);
 
             var logArray = log.ToArray();
             var map = mapBuilder.BuildMap(logArray);
@@ -109,8 +111,9 @@ namespace Det3FitAutoTune
             Console.WriteLine("VE table - corrected, rounded");
             display.ShowVeMap(veTableReader.ReadTable(bytes));
 
-            
-            File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\tables\VETable_corrected.bin", bytes);
+            var now = DateTime.Now;
+            var filename = ExportDir + "VETable_corrected" + now.ToString("-yyyy-MM-dd-HH-mm-ss") + ".bin";
+            File.WriteAllBytes(filename, bytes);
 
             return;
 
@@ -195,7 +198,7 @@ namespace Det3FitAutoTune
                 result = result.Concat(firstLine).ToArray();
             }
 
-            File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_mine.dlg", result);
+            //File.WriteAllBytes(@"C:\Dev\repos\moje\DET3-FIT-analyzer\Samples\log_mine.dlg", result);
         }
     }
 }

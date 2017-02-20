@@ -41,7 +41,6 @@ namespace Det3FitAutoTune.Service
 
                     //AFR only
                     //coeficient = corr.AfrDiffPercent * BulharskaKonstanta;}}
-
                     var delta = correctedTable[rpmIndex, kpaIndex] * coeficient / 100;
                     finalCorrection[rpmIndex, kpaIndex] = delta;
                     correctedTable[rpmIndex, kpaIndex] += delta;

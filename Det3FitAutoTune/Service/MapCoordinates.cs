@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Det3FitAutoTune.Extension;
 using Det3FitAutoTune.Model;
-using Det3FitAutoTune.Model.Value;
 
 namespace Det3FitAutoTune.Service
 {
@@ -14,7 +13,8 @@ namespace Det3FitAutoTune.Service
         private static float _realKpaOffset = (KpaMax - KpaMin) / (16);
 
         public const int RpmMax = 8000;
-        private static int _realRpmOffset = RpmMax / (16 * 2);
+        public const int RpmOffset = 500;
+        private static int _realRpmOffset = RpmMax / (16 * 2) + RpmOffset;
 
         private static int[] _kpaMap;
         private static int[] _rpmMap;

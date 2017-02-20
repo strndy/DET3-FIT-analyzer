@@ -39,19 +39,19 @@ namespace Det3FitAutoTune.Service
                 if (logLine.Coolant.Value < 70) continue;
 
                 // acceleration enrichment
-                if (logLine.AccEnr.Value > 5)
+                if (logLine.AccEnr.Value > 4)
                 {
                     continue;
                 }
 
                 //fuel cut
-                if (logLine.Map.Value < 20 && logLine.Tps.Value < 2 && logLine.Rpm.Value > 1650) continue;
+                if (logLine.Map.Value < 20 && logLine.Tps.Value <= 2 && logLine.Rpm.Value > 2400) continue;
 
                 //engine stop
-                if (logLine.Rpm.Value < 3) continue;
+                if (logLine.Rpm.Value < 2) continue;
 
                 //fuel cut
-                if(Math.Abs(logLine.AfrCorrection.Value) < 0.1 && logLine.AfrWideband.Value > 22) continue;
+                //if(Math.Abs(logLine.AfrCorrection.Value) < 0.1 && logLine.AfrWideband.Value > 22) continue;
 
                 if (i + AfrCorrDelay < log.Length)
                 {
@@ -68,15 +68,14 @@ namespace Det3FitAutoTune.Service
                     logLine.AfrWideband.Bytes = log[i + lambdaDelay].AfrWideband.Bytes;
                 }
 
-
                 var weightedLocations = _coord.GetWeightedLocations(logLine);
 
                 var topOne = weightedLocations.OrderByDescending(w => w.ProximityIndex).FirstOrDefault();
-                //if (topOne != null)
-                //{
-                //    topOne.ProximityIndex = 1;    
-                //}
-                
+                if (topOne != null)
+                {
+                    topOne.ProximityIndex = 1;
+                    //weightedLocations = new List<WeightedLocation>() { topOne };
+                }                
 
                 foreach (var weightedLocation in weightedLocations)
                 {
